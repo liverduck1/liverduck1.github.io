@@ -2,75 +2,924 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>我的个人网站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e6f0e8">
+  <meta name="description" content="雾林来信，晶晶的个人主页。记录喜欢的事物与安静日常。">
+  <title>雾林来信 · 晶晶的个人主页</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f5f9;
-      color: #333;
+    :root {
+      color-scheme: light;
+      --ink: #294333;
+      --muted: #6e8875;
+      --green: #4e8b5e;
+      --line: rgba(91, 137, 99, .20);
+      --glass: rgba(247, 251, 246, .76);
+      --glass-strong: rgba(250, 253, 248, .86);
     }
 
-    .container {
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px #cccccc;
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background-color: #e8f1e9;
+      background-image:
+        linear-gradient(180deg, rgba(232, 243, 244, .26) 0%, rgba(218, 235, 225, .16) 34%, rgba(11, 47, 34, .30) 100%),
+        url("forest-background.jpg");
+      background-repeat: no-repeat;
+      background-position: center, center 43%;
+      background-size: cover;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      display: none;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 26px 0 36px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+    }
+
+    body.has-entered .page {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: #315b3b;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: .04em;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid rgba(91, 137, 99, .22);
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(175, 220, 178, .62), rgba(255,255,255,.54));
+      color: #4e8b5e;
+      box-shadow: 0 0 24px rgba(100, 159, 108, .16);
+    }
+
+    nav { display: flex; gap: 26px; }
+
+    nav a {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    nav a:hover, nav a:focus-visible { color: #326a42; }
+
+    .glass {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      box-shadow: 0 22px 70px rgba(52, 93, 58, .12), inset 0 1px 0 rgba(255,255,255,.76);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      min-height: 350px;
+      grid-template-columns: 1.35fr .65fr;
+      align-items: center;
+      gap: 24px;
+      overflow: hidden;
+      padding: clamp(30px, 6vw, 66px);
+      border-radius: 30px;
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -130px;
+      right: 7%;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: rgba(125, 190, 132, .24);
+      content: "";
+      filter: blur(58px);
+      pointer-events: none;
+    }
+
+    .hero-copy, .portrait-wrap { position: relative; z-index: 1; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: #62836a;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #72b67d;
+      box-shadow: 0 0 13px rgba(84, 158, 95, .65);
+      content: "";
     }
 
     h1 {
-      color: #2563eb;
+      max-width: 620px;
+      margin: 0;
+      font-size: clamp(38px, 6.5vw, 68px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: 1.08;
+    }
+
+    h1 span {
+      display: block;
+      margin-top: 8px;
+      color: #4e8b5e;
+    }
+
+    .hero-intro {
+      max-width: 500px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-intro strong { color: #315b3b; font-size: 16px; font-weight: 650; }
+
+    .signature {
+      max-width: 480px;
+      margin: 17px 0 0;
+      padding-left: 13px;
+      border-left: 2px solid rgba(91, 137, 99, .35);
+      color: #55745d;
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 28px; }
+
+    .button {
+      display: inline-flex;
+      min-height: 43px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 17px;
+      border: 1px solid rgba(91, 137, 99, .22);
+      border-radius: 13px;
+      color: #365d40;
+      background: rgba(255,255,255,.48);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+
+    .button.primary {
+      border-color: transparent;
+      color: #254b30;
+      background: linear-gradient(135deg, #d7efd8, #a5d5aa);
+      box-shadow: 0 8px 28px rgba(95, 158, 104, .20);
+    }
+
+    .button:hover, .button:focus-visible {
+      transform: translateY(-3px);
+      background-color: rgba(255,255,255,.76);
+      box-shadow: 0 9px 28px rgba(92, 151, 99, .20);
+    }
+
+    .button.primary:hover, .button.primary:focus-visible {
+      background: linear-gradient(135deg, #e8f6e7, #b9e1bd);
+    }
+
+    .icon { width: 16px; height: 16px; flex: none; }
+
+    .portrait-wrap {
+      display: grid;
+      min-height: 220px;
+      place-items: center;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 224px;
+      height: 224px;
+      border: 1px solid rgba(88, 139, 96, .23);
+      border-radius: 50%;
+      transform: rotate(-24deg) scaleY(.42);
+    }
+
+    .orbit.two { width: 280px; height: 280px; transform: rotate(40deg) scaleY(.42); }
+
+    .avatar {
+      display: grid;
+      width: 148px;
+      height: 148px;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.88);
+      border-radius: 45px;
+      background: #dceedd;
+      box-shadow: 0 20px 70px rgba(75, 133, 83, .24), inset 0 1px 0 rgba(255,255,255,.62);
+      transform: rotate(-7deg);
+    }
+
+    .avatar img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 53% 35%;
+      transform: rotate(7deg) scale(1.13);
+    }
+
+    .botanical {
+      position: absolute;
+      z-index: 2;
+      width: 67px;
+      height: 67px;
+      filter: drop-shadow(0 8px 12px rgba(74, 120, 78, .16));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .botanical.clover { top: 4%; left: 3%; transform: rotate(-12deg); }
+    .botanical.lily { right: -1%; bottom: -2%; width: 91px; height: 103px; animation-delay: -1.8s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-8px) rotate(4deg); }
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 54px 4px 18px;
+      padding: 14px 18px;
+      border: 1px solid rgba(255, 255, 255, .43);
+      border-radius: 20px;
+      background: rgba(247, 251, 246, .72);
+      box-shadow: 0 12px 28px rgba(17, 54, 36, .10), inset 0 1px 0 rgba(255,255,255,.75);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+    }
+
+    .section-heading p { margin: 0 0 5px; color: #6d9a71; font-size: 10px; font-weight: 700; letter-spacing: .17em; }
+    .section-heading h2 { margin: 0; font-size: 23px; font-weight: 600; letter-spacing: -.025em; }
+    .section-note { color: var(--muted); font-size: 12px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .tile {
+      position: relative;
+      min-height: 190px;
+      overflow: hidden;
+      padding: 25px;
+      border-radius: 22px;
+      transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease, background .24s ease;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      border-color: rgba(83, 151, 93, .42);
+      background: var(--glass-strong);
+      box-shadow: 0 22px 56px rgba(65, 117, 72, .17), 0 0 25px rgba(117, 184, 124, .15);
+    }
+
+    .tile.about { grid-column: span 7; min-height: 220px; }
+    .tile.skills { grid-column: span 5; }
+    .tile.project { grid-column: span 4; min-height: 220px; }
+    .tile.contact { grid-column: span 8; min-height: 220px; }
+
+    .tile-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 23px; }
+
+    .tile-icon {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid rgba(91, 137, 99, .17);
+      border-radius: 13px;
+      color: #4f8558;
+      background: rgba(149, 204, 155, .19);
+    }
+
+    .tile-index { color: rgba(75, 111, 81, .53); font-size: 11px; letter-spacing: .12em; }
+    .tile h3 { margin: 0 0 9px; font-size: 17px; font-weight: 600; }
+    .tile p { max-width: 590px; margin: 0; color: var(--muted); font-size: 13px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+    .chip {
+      padding: 6px 10px;
+      border: 1px solid rgba(91, 137, 99, .16);
+      border-radius: 999px;
+      color: #4e7255;
+      background: rgba(255,255,255,.43);
+      font-size: 11px;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      color: #4f8558;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .project-link:hover { color: #2f6b40; }
+
+    .contact-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+
+    .contact-orb {
+      display: grid;
+      width: 76px;
+      height: 76px;
+      flex: none;
+      place-items: center;
+      border: 1px solid rgba(91, 137, 99, .20);
+      border-radius: 25px;
+      color: #4f8558;
+      background: linear-gradient(145deg, rgba(172, 218, 176, .50), rgba(255,255,255,.42));
+      box-shadow: 0 0 36px rgba(102, 159, 107, .16);
+    }
+
+    .journey {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      overflow: hidden;
+      place-items: center;
+      padding: 28px;
+      color: #294735;
+      background: #dce9df;
+      isolation: isolate;
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+
+    .journey[hidden] { display: none; }
+
+    .journey::before,
+    .journey::after {
+      position: absolute;
+      z-index: -1;
+      inset: -4%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .journey::before {
+      background:
+        linear-gradient(180deg, rgba(241, 247, 245, .60) 0%, rgba(224, 237, 229, .38) 45%, rgba(12, 48, 35, .32) 100%),
+        url("forest-background.jpg") center 43% / cover no-repeat;
+      filter: saturate(.72);
+      animation: forest-drift 30s ease-in-out infinite alternate;
+    }
+
+    .journey::after {
+      background:
+        radial-gradient(ellipse at 50% 42%, rgba(250, 252, 246, .64) 0%, rgba(239, 246, 239, .36) 42%, transparent 75%),
+        linear-gradient(180deg, rgba(249, 251, 247, .18), transparent 60%);
+      filter: blur(8px);
+      animation: mist-drift 18s ease-in-out infinite alternate;
+    }
+
+    .journey.is-leaving {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .journey-panel {
+      position: relative;
+      width: min(760px, 100%);
+      min-height: 390px;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      padding: clamp(30px, 6vw, 62px);
+      border: 1px solid rgba(255, 255, 255, .58);
+      border-radius: 32px;
+      background: rgba(247, 250, 244, .54);
+      box-shadow: 0 24px 80px rgba(30, 67, 45, .15), inset 0 1px 0 rgba(255, 255, 255, .65);
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
       text-align: center;
     }
 
-    h2 {
-      color: #1e40af;
-      border-bottom: 1px solid #dddddd;
-      padding-bottom: 8px;
+    .journey-welcome,
+    .journey-story {
+      grid-area: 1 / 1;
+      width: 100%;
+      transition: opacity 1s ease, transform 1s ease, visibility 1s ease;
     }
 
-    p {
-      line-height: 1.8;
+    .journey-welcome {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .contact {
-      background: #eff6ff;
-      padding: 15px;
-      border-radius: 10px;
+    .journey.is-playing .journey-welcome {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-14px);
+      pointer-events: none;
+    }
+
+    .journey-story {
+      display: grid;
+      min-height: 265px;
+      align-content: center;
+      justify-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px);
+    }
+
+    .journey.is-playing .journey-story {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .journey-mark {
+      display: grid;
+      width: 45px;
+      height: 45px;
+      margin: 0 auto 18px;
+      place-items: center;
+      border: 1px solid rgba(91, 137, 99, .22);
+      border-radius: 50%;
+      color: #5e9067;
+      background: rgba(255, 255, 255, .46);
+      box-shadow: 0 0 34px rgba(111, 166, 117, .23);
+      font-size: 19px;
+    }
+
+    .journey-eyebrow {
+      margin: 0 0 13px;
+      color: #62836a;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+    }
+
+    .journey-title {
+      margin: 0;
+      color: #2b4d38;
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+      font-size: clamp(40px, 7vw, 66px);
+      font-weight: 500;
+      letter-spacing: .08em;
+      line-height: 1.25;
+    }
+
+    .journey-tagline {
+      margin: 17px 0 25px;
+      color: #526f5a;
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+      font-size: clamp(15px, 2.3vw, 19px);
+      line-height: 1.9;
+      letter-spacing: .06em;
+    }
+
+    .journey-button {
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: .06em;
+    }
+
+    .journey-hint {
+      display: block;
+      margin-top: 13px;
+      color: rgba(70, 103, 77, .72);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .story-lines {
+      position: relative;
+      display: grid;
+      width: 100%;
+      min-height: 142px;
+      place-items: center;
+      margin: 13px 0 18px;
+    }
+
+    .story-line {
+      grid-area: 1 / 1;
+      max-width: 620px;
+      margin: 0;
+      color: #2d4b38;
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+      font-size: clamp(21px, 3.7vw, 31px);
+      font-weight: 400;
+      line-height: 1.85;
+      letter-spacing: .045em;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 1s ease, transform 1.2s ease;
+      text-wrap: balance;
+    }
+
+    .story-line.is-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .story-count {
+      color: rgba(75, 111, 81, .70);
+      font-size: 10px;
+      letter-spacing: .2em;
+    }
+
+    .skip-intro {
+      position: absolute;
+      z-index: 2;
+      top: 24px;
+      right: 28px;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 255, 255, .52);
+      border-radius: 999px;
+      color: #355541;
+      background: rgba(247, 250, 244, .44);
+      font: inherit;
+      font-size: 12px;
+      letter-spacing: .04em;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-5px);
+      transition: opacity .35s ease, transform .35s ease, background .2s ease;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+    }
+
+    .journey.is-playing .skip-intro {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .skip-intro:hover,
+    .skip-intro:focus-visible { background: rgba(255, 255, 255, .72); }
+
+    .journey-progress {
+      position: absolute;
+      right: 12%;
+      bottom: 28px;
+      left: 12%;
+      height: 2px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, .46);
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+
+    .journey-progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(48, 91, 60, .72);
+    }
+
+    .journey.is-playing .journey-progress { opacity: 1; }
+    .journey.is-playing .journey-progress span { animation: intro-progress 30s linear forwards; }
+
+    @keyframes forest-drift {
+      from { transform: scale(1.02) translateY(0); }
+      to { transform: scale(1.08) translateY(-1.2%); }
+    }
+
+    @keyframes mist-drift {
+      from { transform: translateX(-1.5%) scale(1); opacity: .72; }
+      to { transform: translateX(1.5%) scale(1.04); opacity: 1; }
+    }
+
+    @keyframes intro-progress {
+      to { width: 100%; }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 28px 4px 0;
+      color: rgba(249, 252, 246, .94);
+      font-size: 11px;
+      text-shadow: 0 1px 8px rgba(10, 39, 28, .72);
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 28px, 600px); padding-top: 16px; }
+      body { background-position: center, center top; }
+      .topbar { margin-bottom: 18px; }
+      nav { gap: 15px; }
+      nav a { font-size: 12px; }
+      .hero { grid-template-columns: 1fr; padding: 34px 28px 18px; }
+      .portrait-wrap { min-height: 190px; }
+      .avatar { width: 122px; height: 122px; border-radius: 36px; }
+      .orbit { width: 190px; height: 190px; }
+      .orbit.two { width: 238px; height: 238px; }
+      .section-heading { margin-top: 42px; }
+      .tile.about, .tile.skills, .tile.project, .tile.contact { grid-column: span 12; }
+      .journey { padding: 18px; }
+      .journey-panel { min-height: 360px; padding: 34px 22px; border-radius: 26px; }
+      .story-lines { min-height: 170px; }
+      .skip-intro { top: 16px; right: 16px; }
+      .journey-progress { right: 9%; bottom: 18px; left: 9%; }
+    }
+
+    @media (max-width: 420px) {
+      nav { gap: 10px; }
+      nav a { font-size: 11px; }
+      .brand { font-size: 12px; }
+      .brand-mark { width: 30px; height: 30px; }
+      .hero { padding-right: 22px; padding-left: 22px; border-radius: 24px; }
+      .contact-orb { width: 58px; height: 58px; border-radius: 19px; }
+      footer { flex-direction: column; }
+      .journey-panel { min-height: 340px; padding: 30px 18px; }
+      .story-lines { min-height: 185px; }
+      .journey-tagline { margin-bottom: 20px; }
+      .story-line { font-size: 21px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .journey::before, .journey::after { animation: none !important; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>你好，我是沈洁</h1>
-
-    <p style="text-align: center;">
-      欢迎来到我的个人网站！
-    </p>
-
-    <h2>关于我</h2>
-    <p>
-      我是一名正在学习做网站的新手。
-      我喜欢学习新知识，也喜欢记录自己的生活和想法。
-    </p>
-
-    <h2>我的技能</h2>
-    <p>
-      HTML、CSS、摄影、写作、设计
-    </p>
-
-    <h2>我的兴趣</h2>
-    <p>
-      阅读、旅行、音乐、电影
-    </p>
-
-    <h2>联系我</h2>
-    <div class="contact">
-      邮箱：jhgg72705@gmail.com
+  <section class="journey" id="journey" aria-label="雾林来信片头">
+    <button class="skip-intro" id="skipIntro" type="button">跳过片头 <span aria-hidden="true">↗</span></button>
+    <div class="journey-panel">
+      <div class="journey-welcome" id="journeyWelcome">
+        <span class="journey-mark" aria-hidden="true">✧</span>
+        <p class="journey-eyebrow">A LETTER FROM THE FOREST</p>
+        <h1 class="journey-title">雾林来信</h1>
+        <p class="journey-tagline">在雾气散开以前，<br>先听我慢慢说几句话。</p>
+        <button class="button primary journey-button" id="startJourney" type="button">开启旅程 <span aria-hidden="true">→</span></button>
+        <span class="journey-hint">约 30 秒 · 点击后开始</span>
+      </div>
+      <div class="journey-story" id="journeyStory" aria-hidden="true">
+        <p class="journey-eyebrow">A LITTLE ABOUT ME</p>
+        <div class="story-lines" id="storyLines" aria-live="polite">
+          <p class="story-line">只是走进森林，欣赏森林，<br>不需要看清每一片叶子。</p>
+          <p class="story-line">你好，我是晶晶。<br>一个 INFP，喜欢在安静里感受世界。</p>
+          <p class="story-line">我听音乐，去运动，<br>也喜欢认真挑选每天的穿搭。</p>
+          <p class="story-line">冥想、神秘学，还有漂亮文艺的事物，<br>让我一点点积累自己的审美。</p>
+          <p class="story-line">也喜欢好好品尝一餐，<br>尤其偏爱咸香和微辣的味道。</p>
+        </div>
+        <span class="story-count" id="storyCount">01 / 05</span>
+      </div>
     </div>
+    <div class="journey-progress" aria-hidden="true"><span></span></div>
+  </section>
+  <div class="page" id="homePage" aria-hidden="true" inert>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="回到首页">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>雾林来信</span>
+      </a>
+      <nav aria-label="页面导航">
+        <a href="#about">关于我</a>
+        <a href="#interests">喜欢的事</a>
+        <a href="#contact">联系</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero glass" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">欢迎来到我的个人主页</p>
+          <h1 id="hero-title">雾林来信</h1>
+          <p class="hero-intro"><strong>你好，我是晶晶。</strong><br>喜欢听音乐、运动和玩穿搭，也喜欢把日子过得安静而有趣。</p>
+          <p class="signature">“只是走进森林，欣赏森林，不需要看清每一片叶子。”</p>
+          <div class="actions">
+            <a class="button primary" href="#about">
+              认识一下
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="button" href="https://github.com/liverduck1" target="_blank" rel="noreferrer">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 8 18.13V22"/></svg>
+              我的 GitHub
+            </a>
+          </div>
+        </div>
+        <div class="portrait-wrap">
+          <div class="orbit"></div>
+          <div class="orbit two"></div>
+          <svg class="botanical clover" viewBox="0 0 100 100" aria-hidden="true">
+            <g fill="#83bd82" stroke="#5d9b67" stroke-width="1.5" stroke-linejoin="round">
+              <path d="M50 52C42 48 37 42 38 36c1-7 9-8 12 0 3-8 11-7 12 0 1 6-4 12-12 16Z"/>
+              <path d="M50 52C42 48 37 42 38 36c1-7 9-8 12 0 3-8 11-7 12 0 1 6-4 12-12 16Z" transform="rotate(90 50 50)"/>
+              <path d="M50 52C42 48 37 42 38 36c1-7 9-8 12 0 3-8 11-7 12 0 1 6-4 12-12 16Z" transform="rotate(180 50 50)"/>
+              <path d="M50 52C42 48 37 42 38 36c1-7 9-8 12 0 3-8 11-7 12 0 1 6-4 12-12 16Z" transform="rotate(270 50 50)"/>
+              <path d="M50 52c2 13 0 27-8 39" fill="none" stroke="#548b5c" stroke-width="4" stroke-linecap="round"/>
+              <path d="M44 77c-9-8-17-7-20-3 4 9 11 12 20 3Z" fill="#9aca91"/>
+            </g>
+          </svg>
+          <svg class="botanical lily" viewBox="0 0 120 145" aria-hidden="true">
+            <defs>
+              <linearGradient id="lilyPetal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fffef8"/>
+                <stop offset="1" stop-color="#e7f0df"/>
+              </linearGradient>
+            </defs>
+            <g fill="url(#lilyPetal)" stroke="#94b58e" stroke-width="1.35" stroke-linejoin="round">
+              <path d="M59 88C43 70 39 46 54 18c13 18 16 44 7 69Z"/>
+              <path d="M57 86C37 73 20 57 20 37c21 6 38 24 43 48Z"/>
+              <path d="M63 86C72 59 91 42 106 40c-3 22-20 40-44 48Z"/>
+              <path d="M56 88C39 78 22 78 13 89c13 15 32 17 48 3Z"/>
+              <path d="M64 88C82 75 100 77 108 88c-13 16-32 19-51 5Z"/>
+              <path d="M59 86C48 103 49 121 61 135c13-13 14-31 2-49Z"/>
+            </g>
+            <g fill="none" stroke="#cfddc4" stroke-width="1.1" stroke-linecap="round" opacity=".9">
+              <path d="M61 82 58 29M58 82 29 43M63 82 98 47M57 87 20 89M64 87 101 89M61 91 61 125"/>
+            </g>
+            <g fill="none" stroke="#bd9b45" stroke-width="1.7" stroke-linecap="round">
+              <path d="M61 83 75 66M61 83 84 75M61 83 76 89"/>
+            </g>
+            <g fill="#e3c66f" stroke="#c6a64c" stroke-width=".7">
+              <ellipse cx="76" cy="65" rx="3" ry="1.5" transform="rotate(-35 76 65)"/>
+              <ellipse cx="85" cy="74" rx="3" ry="1.5" transform="rotate(-12 85 74)"/>
+              <ellipse cx="77" cy="90" rx="3" ry="1.5" transform="rotate(20 77 90)"/>
+            </g>
+            <path d="M61 84c0 18-2 39-10 56" fill="none" stroke="#5e9665" stroke-width="3" stroke-linecap="round"/>
+            <path d="M55 119c-12-11-23-10-28-4 8 12 18 15 28 4Z" fill="#9ac791" stroke="#5e9665" stroke-width="1.2"/>
+          </svg>
+          <div class="avatar"><img src="jingjing-avatar.jpg" alt="晶晶的头像"></div>
+        </div>
+      </section>
+
+      <div class="section-heading" id="about">
+        <div><p>GET TO KNOW ME</p><h2>关于我</h2></div>
+        <span class="section-note">一点点介绍，一点点日常</span>
+      </div>
+
+      <section class="grid" aria-label="个人介绍与喜欢的事">
+        <article class="tile glass about">
+          <div class="tile-top">
+            <span class="tile-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/></svg></span>
+            <span class="tile-index">01 / ABOUT</span>
+          </div>
+          <h3>嗨，很高兴你来了。</h3>
+          <p>我是 INFP，常常在安静里观察世界。喜欢冥想与神秘学，也喜欢漂亮、文艺、让人心里慢下来的事物；审美这件事，我想一点点积累。</p>
+        </article>
+
+        <article class="tile glass skills" id="interests">
+          <div class="tile-top">
+            <span class="tile-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m8 17-5-5 5-5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
+            <span class="tile-index">02 / INTERESTS</span>
+          </div>
+          <h3>我喜欢的事</h3>
+          <p>有时随着音乐走一段路，有时认真搭配今天的衣服。运动和独处，都让我重新找回自己的节奏。</p>
+          <div class="chips"><span class="chip">听音乐</span><span class="chip">运动</span><span class="chip">玩穿搭</span><span class="chip">冥想</span><span class="chip">神秘学</span><span class="chip">审美积累</span></div>
+        </article>
+
+        <article class="tile glass project" id="projects">
+          <div class="tile-top">
+            <span class="tile-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg></span>
+          <span class="tile-index">03 / LITTLE JOY</span>
+          </div>
+          <h3>一餐喜欢的味道</h3>
+          <p>喜欢慢慢品尝食物，偏爱咸香和带一点辣味的东西。让味蕾开心，也算是认真照顾日常。</p>
+          <span class="project-link" aria-label="晶晶喜欢咸香和微辣的味道">咸香 · 微辣 · 慢慢享用</span>
+        </article>
+
+        <article class="tile glass contact" id="contact">
+          <div class="tile-top">
+            <span class="tile-icon" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+            <span class="tile-index">04 / SAY HELLO</span>
+          </div>
+          <div class="contact-row">
+            <div><h3>保持联系</h3><p>欢迎来 GitHub 找我。之后也可以把这里改成你的邮箱或其他社交账号。</p>
+              <a class="project-link" href="https://github.com/liverduck1" target="_blank" rel="noreferrer">访问 GitHub 主页 <span aria-hidden="true">↗</span></a>
+            </div>
+            <span class="contact-orb" aria-hidden="true"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer><span>愿每一天，都有一点新绿。</span><span>© 雾林来信 · 晶晶</span></footer>
   </div>
+  <script>
+    (() => {
+      const DURATION_PER_SCENE = 6000;
+      const journey = document.getElementById("journey");
+      const welcome = document.getElementById("journeyWelcome");
+      const story = document.getElementById("journeyStory");
+      const lines = Array.from(document.querySelectorAll(".story-line"));
+      const counter = document.getElementById("storyCount");
+      const home = document.getElementById("homePage");
+      const startButton = document.getElementById("startJourney");
+      const skipButton = document.getElementById("skipIntro");
+      let hasStarted = false;
+      let hasFinished = false;
+      let sceneTimer;
+      function finishIntro() {
+        if (hasFinished) return;
+        hasFinished = true;
+        window.clearTimeout(sceneTimer);
+        lines.forEach((line) => {
+          line.classList.remove("is-active");
+          line.setAttribute("aria-hidden", "true");
+        });
+        journey.classList.add("is-leaving");
+        journey.setAttribute("aria-hidden", "true");
+        journey.inert = true;
+        home.removeAttribute("inert");
+        home.setAttribute("aria-hidden", "false");
+        document.body.classList.add("has-entered");
+        window.setTimeout(() => { journey.hidden = true; }, 950);
+        window.setTimeout(() => {
+          const brand = document.querySelector(".brand");
+          if (brand) brand.focus({ preventScroll: true });
+        }, 1050);
+      }
+
+      function showScene(index) {
+        if (hasFinished) return;
+        lines.forEach((line, lineIndex) => {
+          const active = lineIndex === index;
+          line.classList.toggle("is-active", active);
+          line.setAttribute("aria-hidden", String(!active));
+        });
+        counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(lines.length).padStart(2, "0")}`;
+        if (index + 1 < lines.length) {
+          sceneTimer = window.setTimeout(() => showScene(index + 1), DURATION_PER_SCENE);
+        } else {
+          sceneTimer = window.setTimeout(finishIntro, DURATION_PER_SCENE);
+        }
+      }
+
+      function startIntro() {
+        if (hasStarted || hasFinished) return;
+        hasStarted = true;
+        journey.classList.add("is-playing");
+        welcome.setAttribute("aria-hidden", "true");
+        story.setAttribute("aria-hidden", "false");
+        showScene(0);
+      }
+
+      startButton.addEventListener("click", startIntro);
+      skipButton.addEventListener("click", finishIntro);
+    })();
+  </script>
 </body>
 </html>
